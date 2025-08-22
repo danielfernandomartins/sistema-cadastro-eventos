@@ -1,0 +1,181 @@
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.*;
+
+// 1. Classe Evento
+class Evento implements Serializable {
+    private String nome;
+    private String endereco;
+    private String categoria;
+    private LocalDateTime horario;
+    private String descricao;
+    private List<Usuario> participantes;
+
+    public Evento(String nome, String endereco, String categoria, LocalDateTime horario, String descricao) {
+        this.nome = nome;
+        this.endereco = endereco;
+        this.categoria = categoria;
+        this.horario = horario;
+        this.descricao = descricao;
+        this.participantes = new ArrayList<>();
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public LocalDateTime getHorario() {
+        return horario;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public List<Usuario> getParticipantes() {
+        return participantes;
+    }
+
+    public void adicionarParticipante(Usuario usuario) {
+        participantes.add(usuario);
+    }
+
+    public void removerParticipante(Usuario usuario) {
+        participantes.remove(usuario);
+    }
+
+    public boolean estaOcorrendoAgora() {
+        return horario.isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Evento: %s\nEndereço: %s\nCategoria: %s\nHorário: %s\nDescrição: %s", 
+                              nome, endereco, categoria, horario, descricao);
+    }
+}
+
+// 2. Classe Usuario
+class Usuario {
+    private String nome;
+    private String email;
+    private String telefone;
+
+    public Usuario(String nome, String email, String telefone) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void participarEvento(Evento evento) {
+        evento.adicionarParticipante(this);
+    }
+
+    public void cancelarEvento(Evento evento) {
+        evento.removerParticipante(this);
+    }
+}
+
+// 3. Classe ArquivoUtil
+class ArquivoUtil {
+
+    public static void salvarEventos(List<Evento> eventos) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("events.data"))) {
+            oos.writeObject(eventos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Evento> carregarEventos() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("events.data"))) {
+            return (List<Evento>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+}
+
+// 4. Classe Sistema
+class Sistema {
+    private List<Evento> eventos;
+    private List<Usuario> usuarios;
+
+    public Sistema() {
+        eventos = ArquivoUtil.carregarEventos();
+    }
+
+    public void cadastrarEvento(String nome, String endereco, String categoria, LocalDateTime horario, String descricao) {
+        Evento evento = new Evento(nome, endereco, categoria, horario, descricao);
+        eventos.add(evento);
+        ArquivoUtil.salvarEventos(eventos);
+    }
+
+    public void consultarEventos() {
+        eventos.forEach(evento -> System.out.println(evento));
+    }
+
+    public void participarEvento(Usuario usuario, Evento evento) {
+        evento.adicionarParticipante(usuario);
+        ArquivoUtil.salvarEventos(eventos);
+    }
+
+    public void cancelarEvento(Usuario usuario, Evento evento) {
+        evento.removerParticipante(usuario);
+        ArquivoUtil.salvarEventos(eventos);
+    }
+
+    public void ordenarEventosPorData() {
+        eventos.sort(Comparator.comparing(Evento::getHorario));
+    }
+}
+
+// 5. Classe Main (Ponto de Entrada)
+public class Main {
+
+    public static void main(String[] args) {
+        Sistema sistema = new Sistema();
+        Scanner scanner = new Scanner(System.in);
+
+        // Exemplo de interação com o usuário para cadastrar um evento
+        System.out.println("Digite o nome do evento:");
+        String nome = scanner.nextLine();
+        System.out.println("Digite o endereço do evento:");
+        String endereco = scanner.nextLine();
+        System.out.println("Digite a categoria do evento:");
+        String categoria = scanner.nextLine();
+        System.out.println("Digite a descrição do evento:");
+        String descricao = scanner.nextLine();
+        System.out.println("Digite o horário do evento (formato YYYY-MM-DDTHH:MM):");
+        LocalDateTime horario = LocalDateTime.parse(scanner.nextLine());
+
+        sistema.cadastrarEvento(nome, endereco, categoria, horario, descricao);
+
+        // Opções de visualização de eventos
+        System.out.println("Eventos cadastrados:");
+        sistema.consultarEventos();
+
+        // Continuar com mais interações, como participar e cancelar eventos
+    }
+}
