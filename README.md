@@ -1,37 +1,43 @@
-Sistema de Gerenciamento de Eventos
+# 📅 Sistema de Gerenciamento de Eventos em Java
 
-Projeto academico para universidade São Judas, desenvolvido em Java(primeiro projeto). 
-Este projeto oferece funcionalidades básicas para criação, listagem, participação e cancelamento de eventos por usuários.
+Projeto acadêmico em Java para cadastro, listagem, participação e cancelamento de eventos.
 
-Funcionalidades
+## Problema
 
-- Cadastro de eventos com:
-  - Nome
-  - Endereço
-  - Categoria
-  - Horário (com suporte a data e hora)
-  - Descrição
+Organizar eventos e participantes em uma aplicação de console com persistência em arquivo.
+
+## Funcionalidades
+
+- Cadastro de eventos
+- Nome, endereço, categoria, data/hora e descrição
 - Listagem de eventos
-- Participação e cancelamento de eventos por usuários
-- Salvamento e carregamento de eventos via arquivo (`events.data`)
+- Participação e cancelamento por usuário
+- Salvamento e carregamento em arquivo
 
-Estrutura do Projeto
+## Estrutura
 
-- `Evento`: Representa um evento com participantes.
-- `Usuario`: Representa um usuário com dados pessoais.
-- `ArquivoUtil`: Lê e salva eventos usando serialização de objetos.
-- `Sistema`: Controla a lógica principal do sistema.
-- `Main`: Classe principal com interface de texto para interação com o usuário.
+- `Evento` — dados e participantes
+- `Usuario` — dados do usuário
+- `ArquivoUtil` — leitura e gravação
+- `Sistema` — regras principais
+- `Main` — interação via terminal
 
-## 🛠️ Requisitos
+## Tecnologia
 
-- Java 8** ou superior
-- IDE ou terminal com suporte para compilação e execução de código Java
+**Java**
 
-Como Executar
+## O que demonstra
 
-1. Clone o repositório:
+- Programação orientada a objetos
+- Separação de responsabilidades
+- Persistência em arquivo
+- Modelagem de entidades
+- Fluxo de aplicação
 
-Como entrar na bash:
-Git clone https://github.com/DFM210383/sistema-eventos-java.git
-cd sistema-eventos-java
+## Como explicar em entrevista
+
+> "Foi meu primeiro projeto acadêmico em Java com mais de uma classe. Modelei usuários e eventos, separei responsabilidades e usei arquivo para persistência. Ele marca a passagem de exercícios isolados para uma aplicação com domínio."
+
+## Autor
+
+**Daniel Fernando Martins**
